@@ -1,49 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bet Transfer Tool</title>
+    <title>SportyBet to Bet9ja Converter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body{font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;}
+        .form-group{margin-bottom:15px;}
+        label{display:block;margin-bottom:5px;}
+        input[type="text"],input[type="number"]{width:100%;padding:8px;box-sizing:border-box;}
+        button{background:#4CAF50;color:white;padding:10px 15px;border:none;cursor:pointer;}
+        #result{margin-top:20px;padding:10px;background:#f0f0f0;}
+    </style>
 </head>
 <body>
-    <h2>SportyBet to Bet9ja Transfer</h2>
-    <form id="betForm">
-        <div>
+    <h1>SportyBet to Bet9ja Converter</h1>
+    <form id="bookingForm">
+        <div class="form-group">
             <label for="booking_code">SportyBet Booking Code:</label>
             <input type="text" id="booking_code" name="booking_code" required>
         </div>
-        <div>
+        <div class="form-group">
             <label for="stake_amount">Stake Amount:</label>
-            <input type="number" id="stake_amount" name="stake_amount" value="100" required>
+            <input type="number" id="stake_amount" name="stake_amount" value="100" min="100" required>
         </div>
-        <div>
-            <button type="submit">Transfer Bet</button>
-        </div>
+        <button type="submit">Convert</button>
     </form>
     <div id="result"></div>
-    <div id="loading" style="display:none;">Processing... Please wait.</div>
-
     <script>
-        document.getElementById('betForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('result').textContent = '';
-            
-            const formData = new FormData(this);
-            
-            fetch('/process', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('result').textContent = data.result;
-            })
-            .catch(error => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('result').textContent = 'Error processing request';
-            });
-        });
+        document.getElementById('bookingForm').addEventListener('submit',function(e){e.preventDefault();document.getElementById('result').innerHTML='Processing... This may take a minute.';const formData=new FormData(this);fetch('/process',{method:'POST',body:formData}).then(response=>response.json()).then(data=>{document.getElementById('result').innerHTML=data.result;}).catch(error=>{document.getElementById('result').innerHTML='Error: '+error;});});
     </script>
 </body>
 </html>
